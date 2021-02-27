@@ -13,6 +13,22 @@ class IRCReply(object):
         self.command_parameters = None
 
 
+class IRCClientMessage(object):
+    """Standard IRC message from a client"""
+    def __init__(self, command, *command_params):
+        self.command = command
+        self.command_params = [command]
+        for param in command_params:
+            self.command_params.append(param)
+        self.message = self.generate_message()
+
+    def generate_message(self):
+        return WHITESPACE_CHAR.join(self.command_params) + "\r\n"
+
+    def get_message(self):
+        return self.message
+
+
 class IRCMessage(object):
     """
         Standard IRC message from either a client
@@ -61,7 +77,6 @@ def parse_message(raw_message):
 
     # RFC 2812 - The prefix, command, and all parameters are separated by one ASCII space character
     parts = message.split(" ")
-    print(parts)
     # Check for prefix
     if parts[0][0] == ":":
         prefix = parts[0]
@@ -80,4 +95,4 @@ def parse_message(raw_message):
             # command parameters before the message
             command_parameters.append(parts[i])
 
-    return IRCMessage(prefix, command, command_parameters)
+    return prefix, command, command_parameters

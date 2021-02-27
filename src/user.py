@@ -1,5 +1,5 @@
-from handler import handle_message
-from message import parse_message
+from src.handler import handle_message
+from src.message import parse_message
 
 class User(object):
     def __init__(self, conn, host):
@@ -21,8 +21,11 @@ class User(object):
         while self.alive:
             try:
                 raw_message = self.get_response()
-                message = parse_message(raw_message)
-                handle_message(self, message, server)
+                if raw_message:
+                    print(raw_message)
+                    print("blah")
+                    prefix, cmd, cmd_args = parse_message(raw_message)
+                    handle_message(self, prefix, cmd, cmd_args, server)
             except Exception as e:
                 print(e)
                 self.quit()

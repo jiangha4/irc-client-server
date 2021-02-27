@@ -1,7 +1,6 @@
 import socket
 import threading
-from message import parse_message
-from user import User
+from src.user import User
 
 class Server(object):
     RPL_WELCOME_TEMPLATE = "Welcome to the Internet Relay Network %s!%s@%s"
@@ -12,6 +11,7 @@ class Server(object):
         self.channels = {}
         self.users = []
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.conn.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.conn.bind((self.hostname, self.port))
 
     def start(self):

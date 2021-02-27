@@ -1,13 +1,12 @@
 
 
-def handle_message(user, message, server):
-    cmd = message.command
-    command_handler[cmd](user, message, server)
+def handle_message(user, prefix, cmd, cmd_args, server):
+    print("Got new message")
+    print(cmd_args)
+    command_handler[cmd](user, prefix, cmd, cmd_args, server)
 
-
-def nick(user, message, server):
-    print(message)
-    input_nick = message.command_params[0]
+def nick(user, prefix, cmd, cmd_args, server):
+    input_nick = cmd_args[0]
     usr = server.get_user(input_nick)
     if usr:
         if (usr.nickname == input_nick) and usr.alive:
@@ -19,8 +18,11 @@ def nick(user, message, server):
         #user not found
         user.set_nickname(input_nick)
 
-def user(user, message, server):
+def user(user, prefix, cmd, cmd_args, server):
     print("USER")
+    username = cmd_args[0]
+    user.set_username(username)
+    user.register()
 
 def join():
     pass
@@ -32,4 +34,5 @@ command_handler = {
     "NICK": nick,
     "USER": user,
     "JOIN": join,
-    "QUIT": quit}
+    "QUIT": quit
+}
