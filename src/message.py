@@ -7,11 +7,44 @@ class BadMessageException(Exception):
 
 class IRCReply(object):
     """Server replies to clients"""
-    def __init__(self):
-        self.prefix = None
-        self.command = None
-        self.command_parameters = None
 
+    command_dict = {
+        "RPL_WELCOME": "001",
+        "RPL_LIST" : "322",
+        "RPL_LISTEND": "323",
+        "RPL_NOTOPIC": "331",
+        "RPL_TOPIC": "332",
+        "RPL_NAMREPLY": "353",
+        "RPL_ENDOFNAMES": "366",
+        "ERR_NOSUCHNICK": "401",
+        "ERR_NOSUCHCHANNEL": "403",
+        "ERR_NORECIPIENT": "411",
+        "ERR_NOTEXTTOSEND": "412",
+        "ERR_UNKNOWNCOMMAND": "421",
+        "ERR_NICKNAMEINUSE": "433",
+        "ERR_NOTONCHANNEL": "442",
+        "ERR_NOTREGISTERED": "451",
+        "ERR_NEEDMOREPARAMS": "461",
+        "ERR_PASSWDMISMATCH": "464",
+        "ERR_ALREADYREGISTRED": "462",
+        "ERR_BADCHANMASK": "476",
+        "ERR_CHANOPRIVSNEEDED": "482"
+    }
+
+    def __init__(self, prefix, command, command_params):
+        self.prefix = prefix
+        self.command = self.command_dict[command]
+        self.command_params = command_params
+        self.message = self.generate_message()
+
+    def generate_message(self):
+        template = ":{prefix} {command} {params} \r\n"
+        message = template.format(prefix=self.prefix, command=self.command,
+                                  params=self.command_params)
+        return message
+
+    def get_message(self):
+        return self.message
 
 class IRCClientMessage(object):
     """Standard IRC message from a client"""
@@ -26,7 +59,7 @@ class IRCClientMessage(object):
         return WHITESPACE_CHAR.join(self.command_params) + "\r\n"
 
     def get_message(self):
-        return self.message
+        return str(self.message)
 
 
 class IRCMessage(object):
@@ -41,20 +74,14 @@ class IRCMessage(object):
         self.command = command
         self.command_parameters = command_params
 
-    def generate_message(self):
-        message_parts = []
+    def get_prefix(self):
+        return self.prefix
 
-        if self.prefix:
-            message_parts.append(self.prefix)
+    def get_command(self):
+        return self.command
 
-        message_parts.append(self.command)
-
-        for cmd in self.command_parameters:
-            message_parts.append(cmd)
-
-        message = WHITESPACE_CHAR.join(message_parts) + "\r\n"
-
-        return message
+    def get_command_params(self):
+        return self.command_parameters
 
 
 def parse_message(raw_message):
@@ -86,13 +113,17 @@ def parse_message(raw_message):
         command = parts[0]
         index = 1
 
-    for i in range(index, len(parts)):
-        # If command parameters start with ':', we know the rest of parsed message part of the
-        # command parameters
-        if parts[i][0] == ":":
-            command_parameters.append(WHITESPACE_CHAR.join(parts[i:]))
-        else:
-            # command parameters before the message
-            command_parameters.append(parts[i])
+    try:
+        for i in range(index, len(parts)):
+            # If command parameters start with ':', we know the rest of parsed message part of the
+            # command parameters
+            if parts[i][0] == ":":
+                command_parameters.append(WHITESPACE_CHAR.join(parts[i:]))
+                break
+            else:
+                # command parameters before the message
+                command_parameters.append(parts[i])
+    except IndexError:
+        command_parameters = []
 
-    return prefix, command, command_parameters
+    return IRCMessage(prefix, command, command_parameters)

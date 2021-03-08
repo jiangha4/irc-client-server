@@ -1,14 +1,17 @@
 import socket
 import argparse
 import time
+import re
+import threading
 from message import IRCClientMessage
 
 HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 42069        # The port used by the server
+PORT = 8888        # The port used by the server
 
 COMMAND_NICK = "NICK"
 COMMAND_USER = "USER"
 COMMAND_JOIN = "JOIN"
+COMMAND_PART = "PART"
 
 
 def arg_parser():
@@ -44,23 +47,77 @@ class Client:
 
         # Once connected with the server. Send NICK message
         nickname_message = self.generate_nick_message()
+        print(nickname_message)
         self.send(nickname_message)
         time.sleep(1)
         username_message = self.generate_user_message()
         self.send(username_message)
 
     def listen(self):
-        return self.conn.recv(512).decode('ascii')
+        # TODO: Parse message and return text
+        while True:
+            message = self.conn.recv(512).decode('ascii')
+            if message:
+                print(message)
 
     def send(self, message):
         self.conn.sendall(bytes(message, encoding='ascii'))
 
+    def process_msg(self, message):
+        # Split once on the first white space occurrence
+        try:
+            msg_parts = message.split(" ", 1)
+            targets = msg_parts[0]
+            text = ":{}".format(msg_parts[1])
+            valid_msg = "{} {}".format(targets, text)
+            return valid_msg
+        except Exception:
+            return message
 
 if __name__ == "__main__":
     args = arg_parser().parse_args()
     c = Client(args.nickname, args.username, args.fullname, HOST, PORT)
     c.connect()
-    while True:
-        msg = c.listen()
-        if msg:
-            print(msg)
+
+    # start a listening thread
+    listening_thread = threading.Thread(target=c.listen, daemon=True).start()
+
+    alive = True
+    while alive:
+        user_input = input("> ")
+        try:
+            regex_cmd_match = re.match(r"^(\/\w+)(.*$)", user_input)
+            user_cmd = regex_cmd_match.group(1).lower()
+            user_cmd_params = regex_cmd_match.group(2).strip()
+
+            if user_cmd == "/quit":
+                parsed_msg = c.process_msg(user_cmd_params)
+                msg_object = IRCClientMessage("QUIT", parsed_msg)
+                c.send(msg_object.get_message())
+                alive = False
+            if user_cmd == "/nick":
+                msg_object = IRCClientMessage("NICK", user_cmd_params)
+            elif user_cmd == "/user":
+                pass
+            elif user_cmd == "/join":
+                msg_object = IRCClientMessage("JOIN", user_cmd_params)
+            elif user_cmd == "/privmsg":
+                parsed_msg = c.process_msg(user_cmd_params)
+                msg_object = IRCClientMessage("PRIVMSG", parsed_msg)
+            elif user_cmd == "/part":
+                parsed_msg = c.process_msg(user_cmd_params)
+                msg_object = IRCClientMessage("PART", parsed_msg)
+            elif user_cmd == "/list":
+                msg_object = IRCClientMessage("LIST", user_cmd_params)
+            elif user_cmd == "/names":
+                msg_object = IRCClientMessage("NAMES", user_cmd_params)
+            elif user_cmd == "/topic":
+                parsed_msg = c.process_msg(user_cmd_params)
+                msg_object = IRCClientMessage("TOPIC", parsed_msg)
+            else:
+                # TODO: unknown command prompt?
+                pass
+            c.send(msg_object.get_message())
+        except Exception as e:
+            pass
+
