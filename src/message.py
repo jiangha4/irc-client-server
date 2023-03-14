@@ -1,5 +1,5 @@
-
 WHITESPACE_CHAR = " "
+
 
 class BadMessageException(Exception):
     pass
@@ -10,7 +10,7 @@ class IRCReply(object):
 
     command_dict = {
         "RPL_WELCOME": "001",
-        "RPL_LIST" : "322",
+        "RPL_LIST": "322",
         "RPL_LISTEND": "323",
         "RPL_NOTOPIC": "331",
         "RPL_TOPIC": "332",
@@ -28,7 +28,7 @@ class IRCReply(object):
         "ERR_PASSWDMISMATCH": "464",
         "ERR_ALREADYREGISTRED": "462",
         "ERR_BADCHANMASK": "476",
-        "ERR_CHANOPRIVSNEEDED": "482"
+        "ERR_CHANOPRIVSNEEDED": "482",
     }
 
     def __init__(self, prefix, command, command_params):
@@ -39,15 +39,20 @@ class IRCReply(object):
 
     def generate_message(self):
         template = ":{prefix} {command} {params} \r\n"
-        message = template.format(prefix=self.prefix, command=self.command,
-                                  params=self.command_params)
+        message = template.format(
+            prefix=self.prefix,
+            command=self.command,
+            params=self.command_params,
+        )
         return message
 
     def get_message(self):
         return self.message
 
+
 class IRCClientMessage(object):
     """Standard IRC message from a client"""
+
     def __init__(self, command, *command_params):
         self.command = command
         self.command_params = [command]
@@ -64,9 +69,10 @@ class IRCClientMessage(object):
 
 class IRCMessage(object):
     """
-        Standard IRC message from either a client
-        Built using RFC 2812 as a reference
+    Standard IRC message from either a client
+    Built using RFC 2812 as a reference
     """
+
     # Clients do not prefix
     # Prefixs are used by the server to indicate the true origin of the message
     def __init__(self, prefix, command, command_params):

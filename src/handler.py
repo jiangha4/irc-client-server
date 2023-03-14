@@ -5,16 +5,17 @@ from src.channel import Channel
 
 logger = logging.getLogger()
 handler = logging.StreamHandler()
-formatter = logging.Formatter(
-        '%(asctime)s %(levelname)-8s %(message)s')
+formatter = logging.Formatter("%(asctime)s %(levelname)-8s %(message)s")
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
+
 
 def send_to_user(user, server, text, cmd):
     if user.alive:
         msg_obj = IRCReply(server.get_prefix(), cmd, text)
         user.send(msg_obj.get_message())
+
 
 def handle_message(user, server, message):
     logger.info("Command: {}".format(message.get_command()))
@@ -37,6 +38,7 @@ def handle_message(user, server, message):
             text = ":You have not registered"
             cmd = "ERR_NOTREGISTERED"
             send_to_user(user, server, text, cmd)
+
 
 def nick(user, server, message):
     try:
@@ -89,9 +91,9 @@ def user(user, server, message):
     user.register(mode, username, fullname)
 
     if user.is_registered():
-        text = "Welcome to the Internet Relay Network {}!{}@{}".format(user.get_nickname(),
-                                                               user.get_username(),
-                                                               user.get_hostname())
+        text = "Welcome to the Internet Relay Network {}!{}@{}".format(
+            user.get_nickname(), user.get_username(), user.get_hostname()
+        )
         cmd = "RPL_WELCOME"
     else:
         text = ":You have not registered"
@@ -124,9 +126,11 @@ def join(user, server, message):
                 # or if the password is None
                 if ch.get_password() == pswd or not ch.get_password:
                     text = "JOIN {}".format(name)
-                    prefix = "{}!{}@{}".format(user.get_nickname(),
-                                               user.get_username(),
-                                               user.get_hostname())
+                    prefix = "{}!{}@{}".format(
+                        user.get_nickname(),
+                        user.get_username(),
+                        user.get_hostname(),
+                    )
                     for usr in ch.get_users():
                         msg = prefix + " " + text + "\r\n"
                         usr.send(msg)
@@ -159,8 +163,8 @@ def join(user, server, message):
     send_to_user(user, server, text, cmd)
 
 
-#todo: if message exists, send to others in channels
-#todo: remove user from channels
+# todo: if message exists, send to others in channels
+# todo: remove user from channels
 def quit(user, server, message):
     logger.info("Command QUIT")
     user.quit()
@@ -169,7 +173,7 @@ def quit(user, server, message):
 def private(user, server, message):
     msg_params = message.get_command_params()
     # If there are not 2 parts to the message, the message is incorrectly formatted
-    #todo: revisit this error checking
+    # todo: revisit this error checking
     if len(msg_params) < 2:
         try:
             if msg_params[0].startswith(":"):
@@ -190,30 +194,36 @@ def private(user, server, message):
         for target in targets.split(","):
             if target.startswith("#"):
                 cname = target[1:]
-                #send to channels
+                # send to channels
                 if server.does_channel_exist(cname):
                     channel = server.get_channel(cname)
                     # get users in channel
                     for usr in channel.get_users():
                         # Don't send a message to yourself
                         if usr.get_nickname() != user.get_nickname():
-                            prefix = "{}!{}@{}".format(user.get_nickname(),
-                                                       user.get_username(),
-                                                       user.get_hostname())
+                            prefix = "{}!{}@{}".format(
+                                user.get_nickname(),
+                                user.get_username(),
+                                user.get_hostname(),
+                            )
                             msg_text = msg_params[1]
-                            msg = "{} PRIVMSG {} {}".format(prefix, target, msg_text)
+                            msg = "{} PRIVMSG {} {}".format(
+                                prefix, target, msg_text
+                            )
                             usr.send(msg)
                 else:
                     text = "<{}> :No such nick".format(cname)
                     cmd = "ERR_NOSUCHNICK"
                     send_to_user(user, server, text, cmd)
             else:
-                #send to users
+                # send to users
                 target_usr = server.get_user(target)
                 if target_usr and target_usr.alive:
-                    prefix = "{}!{}@{}".format(user.get_nickname(),
-                                               user.get_username(),
-                                               user.get_hostname())
+                    prefix = "{}!{}@{}".format(
+                        user.get_nickname(),
+                        user.get_username(),
+                        user.get_hostname(),
+                    )
                     msg_text = msg_params[1]
                     msg = "{} PRIVMSG {}".format(prefix, msg_text)
                     target_usr.send(msg)
@@ -329,16 +339,20 @@ def part(user, server, message):
             if channel.is_user_in_channel(nickname):
                 channel.remove_user(nickname)
 
-                #if there is a message, send it
+                # if there is a message, send it
                 try:
                     parting_msg = msg_parts[1]
                     for usr in channel.get_users():
                         # Don't send a message to yourself
                         if usr.get_nickname() != user.get_nickname():
-                            prefix = "{}!{}@{}".format(user.get_nickname(),
-                                                       user.get_username(),
-                                                       user.get_hostname())
-                            msg = "{} PRIVMSG {} {}".format(prefix, cname, parting_msg)
+                            prefix = "{}!{}@{}".format(
+                                user.get_nickname(),
+                                user.get_username(),
+                                user.get_hostname(),
+                            )
+                            msg = "{} PRIVMSG {} {}".format(
+                                prefix, cname, parting_msg
+                            )
                             usr.send(msg)
                 except IndexError:
                     pass
@@ -409,5 +423,5 @@ command_handler = {
     "LIST": list,
     "NAMES": names,
     "PART": part,
-    "TOPIC": topic
+    "TOPIC": topic,
 }

@@ -2,6 +2,7 @@ import socket
 import threading
 from src.user import User
 
+
 class Server(object):
     def __init__(self):
         self.hostname = "127.0.0.1"
@@ -26,7 +27,7 @@ class Server(object):
 
     def get_user(self, userNickname):
         """Attempt to find the input nickname in the list of Users.
-            If we can't find the user, return None"""
+        If we can't find the user, return None"""
         for usr in self.users:
             if userNickname == usr.nickname:
                 return usr
@@ -35,7 +36,9 @@ class Server(object):
     def is_nick_registered(self, nickname):
         """Attempt to find if a nickname is already registered to a user"""
         for user in self.users:
-            if (nickname == user.get_nickname()) and (user.is_registered() and (user.alive)):
+            if (nickname == user.get_nickname()) and (
+                user.is_registered() and (user.alive)
+            ):
                 return True
         return False
 
