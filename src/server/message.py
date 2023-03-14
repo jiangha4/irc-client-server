@@ -50,23 +50,6 @@ class IRCReply(object):
         return self.message
 
 
-class IRCClientMessage(object):
-    """Standard IRC message from a client"""
-
-    def __init__(self, command, *command_params):
-        self.command = command
-        self.command_params = [command]
-        for param in command_params:
-            self.command_params.append(param)
-        self.message = self.generate_message()
-
-    def generate_message(self):
-        return WHITESPACE_CHAR.join(self.command_params) + "\r\n"
-
-    def get_message(self):
-        return str(self.message)
-
-
 class IRCMessage(object):
     """
     Standard IRC message from either a client
