@@ -3,7 +3,6 @@ import argparse
 import time
 import re
 import threading
-from message import IRCClientMessage
 
 HOST = "127.0.0.1"  # The server's hostname or IP address
 PORT = 8888  # The port used by the server
@@ -12,6 +11,24 @@ COMMAND_NICK = "NICK"
 COMMAND_USER = "USER"
 COMMAND_JOIN = "JOIN"
 COMMAND_PART = "PART"
+WHITESPACE_CHAR = " "
+
+
+class IRCClientMessage(object):
+    """Standard IRC message from a client"""
+
+    def __init__(self, command, *command_params):
+        self.command = command
+        self.command_params = [command]
+        for param in command_params:
+            self.command_params.append(param)
+        self.message = self.generate_message()
+
+    def generate_message(self):
+        return WHITESPACE_CHAR.join(self.command_params) + "\r\n"
+
+    def get_message(self):
+        return str(self.message)
 
 
 def arg_parser():

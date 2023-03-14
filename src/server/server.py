@@ -1,11 +1,11 @@
 import socket
 import threading
-from src.user import User
+from user import User
 
 
 class Server(object):
     def __init__(self):
-        self.hostname = "127.0.0.1"
+        self.hostname = "0.0.0.0"
         self.port = 8888
         self.prefix = self.hostname
         self.channels = []
