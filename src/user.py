@@ -1,6 +1,7 @@
 from src.handler import handle_message
 from src.message import parse_message
 
+
 class User(object):
     def __init__(self, conn, host):
         self.registered = False
@@ -14,21 +15,21 @@ class User(object):
         self.fullname = None
 
     def send(self, message):
-        self.conn.sendall(bytes(message, encoding='ascii'))
+        self.conn.sendall(bytes(message, encoding="ascii"))
 
     def get_response(self):
-        return self.conn.recv(512).decode('ascii')
+        return self.conn.recv(512).decode("ascii")
 
     def listen(self, server):
         while self.alive:
-            #try:
-                raw_message = self.get_response()
-                if raw_message:
-                    irc_message = parse_message(raw_message)
-                    handle_message(self, server, irc_message)
-            #except Exception as e:
-            #    print(e)
-            #    self.quit()
+            # try:
+            raw_message = self.get_response()
+            if raw_message:
+                irc_message = parse_message(raw_message)
+                handle_message(self, server, irc_message)
+        # except Exception as e:
+        #    print(e)
+        #    self.quit()
 
     def is_registered(self):
         return self.registered

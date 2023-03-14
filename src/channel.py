@@ -1,4 +1,3 @@
-
 class Channel(object):
     def __init__(self, name, creator, password=None):
         self.name = name
@@ -35,7 +34,9 @@ class Channel(object):
         return False
 
     def remove_user(self, nickname):
-        new_users = [user for user in self.users if user.get_nickname() != nickname]
+        new_users = [
+            user for user in self.users if user.get_nickname() != nickname
+        ]
         self.users = new_users
 
     def is_protected(self):

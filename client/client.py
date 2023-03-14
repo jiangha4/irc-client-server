@@ -5,8 +5,8 @@ import re
 import threading
 from message import IRCClientMessage
 
-HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 8888        # The port used by the server
+HOST = "127.0.0.1"  # The server's hostname or IP address
+PORT = 8888  # The port used by the server
 
 COMMAND_NICK = "NICK"
 COMMAND_USER = "USER"
@@ -15,13 +15,30 @@ COMMAND_PART = "PART"
 
 
 def arg_parser():
-    parser = argparse.ArgumentParser(description='Client for simple IRC server')
-    parser.add_argument('--nickname', '-n', type=str, required=True,
-                        help='Nick name to use in the IRC Server')
-    parser.add_argument('--username', '-u', type=str, required=True,
-                        help='User name for the IRC Server')
-    parser.add_argument('--fullname', '-f', type=str, required=True,
-                        help='Real name for the IRC Server')
+    parser = argparse.ArgumentParser(
+        description="Client for simple IRC server"
+    )
+    parser.add_argument(
+        "--nickname",
+        "-n",
+        type=str,
+        required=True,
+        help="Nick name to use in the IRC Server",
+    )
+    parser.add_argument(
+        "--username",
+        "-u",
+        type=str,
+        required=True,
+        help="User name for the IRC Server",
+    )
+    parser.add_argument(
+        "--fullname",
+        "-f",
+        type=str,
+        required=True,
+        help="Real name for the IRC Server",
+    )
 
     return parser
 
@@ -39,7 +56,9 @@ class Client:
         return IRCClientMessage(COMMAND_NICK, self.nickname).get_message()
 
     def generate_user_message(self):
-        return IRCClientMessage(COMMAND_USER, self.username, "*", "*", ":" + self.fullname).get_message()
+        return IRCClientMessage(
+            COMMAND_USER, self.username, "*", "*", ":" + self.fullname
+        ).get_message()
 
     def connect(self):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -56,12 +75,12 @@ class Client:
     def listen(self):
         # TODO: Parse message and return text
         while True:
-            message = self.conn.recv(512).decode('ascii')
+            message = self.conn.recv(512).decode("ascii")
             if message:
                 print(message)
 
     def send(self, message):
-        self.conn.sendall(bytes(message, encoding='ascii'))
+        self.conn.sendall(bytes(message, encoding="ascii"))
 
     def process_msg(self, message):
         # Split once on the first white space occurrence
@@ -73,6 +92,7 @@ class Client:
             return valid_msg
         except Exception:
             return message
+
 
 if __name__ == "__main__":
     args = arg_parser().parse_args()
@@ -120,4 +140,3 @@ if __name__ == "__main__":
             c.send(msg_object.get_message())
         except Exception as e:
             pass
-
