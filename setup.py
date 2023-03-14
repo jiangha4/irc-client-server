@@ -11,11 +11,7 @@ setuptools.setup(
     author="davidjiang.haohan@gmail.com",
     extras_require={
         "test": [
-            'pytest==7.1.3',
-            'pytest-html==3.1.1',
-            'pytest-cov',
-            'pylint',
-            'jinja2',
+            'pytest',
             'black',
         ],
     },
