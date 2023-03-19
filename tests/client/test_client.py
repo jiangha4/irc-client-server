@@ -29,8 +29,9 @@ def test_client_generate_nick():
 def test_client_generate_user():
     c = Client("foo", "bar", "foo bar", None, None)
 
-    expected = IRCClientMessage("USER", "bar", "*", "*", ":foo bar").get_message()
+    expected = IRCClientMessage(
+        "USER", "bar", "*", "*", ":foo bar"
+    ).get_message()
     actual = c.generate_user_message()
 
     assert expected == actual
-

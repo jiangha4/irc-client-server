@@ -15,3 +15,9 @@ def test_user_registration():
 
     assert u.is_registered()
 
+
+def test_user_quit():
+    u = User("foo", "bar")
+    u.quit()
+
+    assert not u.alive

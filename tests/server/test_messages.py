@@ -14,7 +14,7 @@ def test_parse_message_nick_phrase():
 
 
 def test_parse_message_user_phrase():
-    msg ="USER foo * * :PersonFoo Bar\r\n"
+    msg = "USER foo * * :PersonFoo Bar\r\n"
 
     actual = parse_message(msg)
     expected = IRCMessage(None, "USER", ["foo", "*", "*", ":PersonFoo Bar"])
