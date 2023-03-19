@@ -43,27 +43,33 @@ class Server(object):
         return False
 
     def get_prefix(self):
+        """Return the prefix of the server"""
         return self.prefix
 
     def does_channel_exist(self, channel_name):
+        """Checks if the channel exists on this server"""
         for channel in self.channels:
             if channel_name == channel.get_name():
                 return True
         return False
 
     def add_channel(self, channel):
+        """Add a channel to this server"""
         self.channels.append(channel)
 
     def get_channel(self, name):
+        """Get a channel by name"""
         for channel in self.channels:
             if channel.get_name() == name:
                 return channel
         return None
 
     def get_all_channels(self):
+        """Return all channels"""
         return self.channels
 
     def get_public_channels(self):
+        """Get a list of all public channels on this server"""
         public_channels = []
         for channel in self.channels:
             if not channel.is_protected():
@@ -71,6 +77,7 @@ class Server(object):
         return public_channels
 
     def get_private_channels(self):
+        """Get a list of all private channels on this server"""
         private_channels = []
         for channel in self.channels:
             if channel.is_protected():

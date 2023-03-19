@@ -7,4 +7,4 @@ COPY server /usr/src/server
 
 WORKDIR /usr/src/server
 
-#CMD ["python", "runner.py"]
+CMD ["python", "runner.py"]
