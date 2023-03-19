@@ -1,3 +1,6 @@
+"""This module models message objects as described by RFC2812"""
+
+
 WHITESPACE_CHAR = " "
 
 

@@ -1,3 +1,5 @@
+"""This module contains the server object invoked by the runner"""
+
 import socket
 import threading
 from user import User

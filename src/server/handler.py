@@ -1,3 +1,5 @@
+"""This module contains the message handlers"""
+
 import logging
 from itertools import zip_longest
 from message import IRCReply
