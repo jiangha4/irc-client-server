@@ -38,6 +38,8 @@ Current support commands:
 All server source code is contained with `src/server/` and client interface is contained in
 `client/`.
 
+From the root directory:
+
 Tests and linting:
 ```bash
 tox
