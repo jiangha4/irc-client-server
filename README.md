@@ -52,3 +52,7 @@ tox -e format
 
 Formatter is run separately to allow for CI/CD purposes. Allows automated CD to run tox unittests and
 linting check without running a Black formatting pass. 
+
+### Github Actions Workflow
+Github actions workflow is located in `.github/workflows`. Runs a tox build on push and pull requests. 
+Status badge is displayed on this README. 
