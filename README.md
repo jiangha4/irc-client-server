@@ -1,4 +1,5 @@
 # IRC-Client-Server
+![workflow](https://github.com/jiangha4/irc-client-server/actions/workflows/workflow.yml/badge.svg)
 
 ## Purpose
 This repository contains a python3 implementation of an IRC Server and Client built 
