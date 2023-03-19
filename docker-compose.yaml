@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  irc_server:
+    build: ./src
+    ports:
+      - "8888:8888"
+
+
