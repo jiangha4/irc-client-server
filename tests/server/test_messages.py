@@ -40,19 +40,3 @@ def test_parse_message_prefix_phrase():
     assert actual.get_prefix() == expected.get_prefix()
     assert actual.get_command() == expected.get_command()
     assert actual.get_command_params() == expected.get_command_params()
-
-# def test_generate_simple_nick():
-#     # Message looks like: NICK foo
-#     msg = "NICK foo\r\n"
-#     assert IRCClientMessage("NICK", "foo").get_message() == msg
-#
-#
-# def test_generate_simple_user():
-#     # Message looks like: USER foo * * :PersonFoo Bar
-#     msg = "USER foo * * :PersonFoo Bar\r\n"
-#     assert (
-#         IRCClientMessage(
-#             "USER", "foo", "*", "*", ":PersonFoo Bar"
-#         ).get_message()
-#         == msg
-#     )
