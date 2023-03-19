@@ -1,3 +1,5 @@
+"""This module contains a user class as a client interface"""
+
 from handler import handle_message
 from message import parse_message
 
