@@ -5,6 +5,6 @@ EXPOSE 8888
 
 COPY server /usr/src/server
 
-WORKDIR /usr/src/server
+#WORKDIR /usr/src/server
 
-CMD ["python", "runner.py"]
+CMD ["python", "/usr/src/server/runner.py"]
