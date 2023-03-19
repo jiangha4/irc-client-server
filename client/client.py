@@ -117,7 +117,7 @@ if __name__ == "__main__":
     c.connect()
 
     # start a listening thread
-    listening_thread = threading.Thread(target=c.listen, daemon=True).start()
+    threading.Thread(target=c.listen, daemon=True).start()
 
     alive = True
     while alive:
