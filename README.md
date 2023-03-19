@@ -8,14 +8,9 @@ according to RFC specifications. The server is dockerized and listens on port 88
 ## Usage
 
 ### Server
-The server container can be built with:
+To run the server:
 ```bash
-docker build -t irc-server .
-```
-
-Then, you can start the server with:
-```bash
-docker run -p 8888:8888 -t irc-server
+docker-compose up
 ```
 
 ### Client
