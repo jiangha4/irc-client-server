@@ -1,8 +1,10 @@
 # IRC-Client-Server
 
-### Purpose
+## Purpose
 This repository contains a python3 implementation of an IRC Server and Client built 
 according to RFC specifications. The server is dockerized and listens on port 8888.
+
+## Usage
 
 ### Server
 The server container can be built with:
@@ -31,3 +33,20 @@ Current support commands:
 6. LIST - List all channels
 7. NAMES - List of users
 8. TOPIC - Send a message to a channel or create it if it doesn't exist
+
+## Contributions
+All server source code is contained with `src/server/` and client interface is contained in
+`client/`.
+
+Tests and linting:
+```bash
+tox
+```
+
+To run the Black formatter:
+```bash
+tox -e format
+```
+
+Formatter is run separately to allow for CI/CD purposes. Allows automated CD to run tox unittests and
+linting check without running a Black formatting pass. 
