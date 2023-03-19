@@ -1,5 +1,5 @@
-from server import Server
+from server import Server # pylint: disable=E0611
 
 if __name__ == "__main__":
-    s = Server()
+    s = Server()  # pylint: disable=E1102
     s.start()

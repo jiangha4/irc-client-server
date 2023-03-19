@@ -1,4 +1,4 @@
-import pytest
+import pytest  # pylint: disable=E0401
 from src.server.message import parse_message, IRCMessage, BadMessageException
 
 
