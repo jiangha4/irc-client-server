@@ -41,6 +41,10 @@ Tests and linting:
 tox
 ```
 
+Generated test reports are located in `reports/`.
+
+Pylint rc file located `utils/pylint.rc`.
+
 To run the Black formatter:
 ```bash
 tox -e format
