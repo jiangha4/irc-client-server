@@ -1,3 +1,6 @@
+"""This module models a channel object as described by RFC2812"""
+
+
 class Channel(object):
     def __init__(self, name, creator, password=None):
         self.name = name
@@ -7,6 +10,7 @@ class Channel(object):
         self.creator = creator
 
     def add_user(self, nickname):
+        """Add user object to users list"""
         self.users.append(nickname)
 
     def set_topic(self, topic):

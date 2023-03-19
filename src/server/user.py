@@ -22,14 +22,10 @@ class User(object):
 
     def listen(self, server):
         while self.alive:
-            # try:
             raw_message = self.get_response()
             if raw_message:
                 irc_message = parse_message(raw_message)
                 handle_message(self, server, irc_message)
-        # except Exception as e:
-        #    print(e)
-        #    self.quit()
 
     def is_registered(self):
         return self.registered
