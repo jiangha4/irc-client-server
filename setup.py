@@ -12,6 +12,7 @@ setuptools.setup(
     extras_require={
         "test": [
             'pytest',
+            'pytest-html',
             'pylint',
             'black',
         ],
