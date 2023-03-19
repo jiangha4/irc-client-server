@@ -1,5 +1,5 @@
-from handler import handle_message
-from message import parse_message
+from src.server.handler import handle_message
+from src.server.message import parse_message
 
 
 class User(object):

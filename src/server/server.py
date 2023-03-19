@@ -1,6 +1,6 @@
 import socket
 import threading
-from user import User
+from src.server.user import User
 
 
 class Server(object):

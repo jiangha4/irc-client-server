@@ -1,7 +1,7 @@
 import logging
 from itertools import zip_longest
-from message import IRCReply
-from channel import Channel
+from src.server.message import IRCReply
+from src.server.channel import Channel
 
 logger = logging.getLogger()
 handler = logging.StreamHandler()
