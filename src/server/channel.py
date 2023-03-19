@@ -8,6 +8,7 @@ class Channel(object):
         self.creator = creator
 
     def add_user(self, nickname):
+        """Add user object to users list"""
         self.users.append(nickname)
 
     def set_topic(self, topic):
